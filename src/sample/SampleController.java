@@ -37,7 +37,7 @@ public class SampleController {
     private Map python_download_url = new HashMap<String, String>() {
         {
             put("Windows", "https://www.python.org/ftp/python/3.5.3/python-3.5.3.exe");
-            put("MACOS", "https://www.python.org/ftp/python/3.5.3/python-3.5.3-macosx10.6.pkg");
+            put("Mac", "https://www.python.org/ftp/python/3.5.3/python-3.5.3-macosx10.6.pkg");
             put("LINUX", "https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tgz");
         }
     };
@@ -45,36 +45,36 @@ public class SampleController {
         {
             put("Windows", "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-32-bit.exe");
             put("Windows64", "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-64-bit.exe");
-            put("MACOS", "https://downloads.sourceforge.net/project/git-osx-installer/git-2.10.1-intel-universal-mavericks.dmg?r=&ts=1485112812&use_mirror=netix");
-            put("LINUX", "https://codeload.github.com/git/git/zip/v2.11.0");
+            put("Mac", "https://downloads.sourceforge.net/project/git-osx-installer/git-2.10.1-intel-universal-mavericks.dmg?r=&ts=1485112812&use_mirror=netix");
+            put("Linux", "https://codeload.github.com/git/git/zip/v2.11.0");
         }
     };
     private Map firefox_browser_download_url = new HashMap<String, String>() {
         {
             put("Windows", "https://ftp.mozilla.org/pub/firefox/releases/50.1.0/win32/ru/Firefox%20Setup%2050.1.0.exe");
-            put("MACOS", "https://ftp.mozilla.org/pub/firefox/releases/50.1.0/mac/ru/Firefox%2050.1.0.dmg");
-            put("LINUX", "https://ftp.mozilla.org/pub/firefox/releases/50.1.0/linux-x86_64/ru/firefox-50.1.0.tar.bz2");
+            put("Mac", "https://ftp.mozilla.org/pub/firefox/releases/50.1.0/mac/ru/Firefox%2050.1.0.dmg");
+            put("Linux", "https://ftp.mozilla.org/pub/firefox/releases/50.1.0/linux-x86_64/ru/firefox-50.1.0.tar.bz2");
         }
     };
     private Map firefox_driver_download_url = new HashMap<String, String>() {
         {
             put("Windows", "https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-win32.zip");
-            put("MACOS", "https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-macos.tar.gz");
-            put("LINUX", "https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-linux32.tar.gz");
+            put("Mac", "https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-macos.tar.gz");
+            put("Linux", "https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-linux32.tar.gz");
         }
     };
     private Map chrome_browser_download_url = new HashMap<String, String>() {
         {
             put("Windows", "https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7B23939508-4452-649D-5896-A18215642189%7D%26lang%3Dru%26browser%3D4%26usagestats%3D1%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Ddefaultbrowser/update2/installers/ChromeStandaloneSetup64.exe");
-            put("MACOS", "https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg");
-            put("LINUX", "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb");
+            put("Mac", "https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg");
+            put("Linux", "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb");
         }
     };
     private Map chrome_driver_download_url = new HashMap<String, String>() {
         {
             put("Windows", "https://chromedriver.storage.googleapis.com/2.27/chromedriver_win32.zip");
-            put("MACOS", "https://chromedriver.storage.googleapis.com/2.27/chromedriver_mac64.zip");
-            put("LINUX", "https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip");
+            put("Mac", "https://chromedriver.storage.googleapis.com/2.27/chromedriver_mac64.zip");
+            put("Linux", "https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip");
         }
     };
 
@@ -108,7 +108,7 @@ public class SampleController {
             File tmp_chrome_browser = null;
             File tmp_chrome_driver = null;
             File tmp_git = null;
-            boolean is64bit ;
+            boolean is64bit;
 
             if (OSNAME.contains("Windows")) {
                 is64bit = (System.getenv("ProgramFiles(x86)") != null);
@@ -142,6 +142,32 @@ public class SampleController {
                     tmp_git = File.createTempFile("git", ".exe");
                     output_git = "/downloaded/Git-2.11.0.3-32-bit.exe";
                 }
+            }
+            else if (OSNAME.contains("Mac"))
+            {
+                python_download_string = (String) python_download_url.get("Mac");
+                tmp_python = File.createTempFile("python", ".pkg");
+                output_python = "/downloaded/python-3.5.3.pkg";
+
+                firefox_browser_download_string = (String) firefox_browser_download_url.get("Mac");
+                tmp_firefox_browser = File.createTempFile("firefox", ".dmg");
+                output_firefox_browser = "/downloaded/firefox.dmg";
+
+                firefox_driver_download_string = (String) firefox_driver_download_url.get("Mac");
+                tmp_firefox_driver = File.createTempFile("geckodriver", ".zip");
+                output_firefox_driver = "/downloaded/geckodriver.zip";
+
+                chrome_browser_download_string = (String) chrome_browser_download_url.get("Mac");
+                tmp_chrome_browser = File.createTempFile("chrome", ".dmg");
+                output_chrome_browser = "/downloaded/chrome.dmg";
+
+                chrome_driver_download_string = (String) chrome_driver_download_url.get("Mac");
+                tmp_chrome_driver = File.createTempFile("chromedriver", ".zip");
+                output_chrome_driver = "/downloaded/chromedriver.zip";
+
+                git_download_string = (String) git_download_url.get("Mac");
+                tmp_git = File.createTempFile("git", ".exe");
+                output_git = "/downloaded/Git-2.11.0.3-64-bit.exe";
             }
             if (python_checkbox.isSelected()) {
                 final Worker python_download_worker = new Worker(python_download_string, tmp_python, output_python);
@@ -282,8 +308,9 @@ public class SampleController {
         @Override
         protected Void doInBackground() throws Exception {
             DOWNLOADS++;
-                Platform.runLater(() -> active_downloads_label.setText(String.valueOf(DOWNLOADS)));
-                    URL url = new URL(site);
+
+            Platform.runLater(() -> active_downloads_label.setText("Active Downloads: " + String.valueOf(DOWNLOADS)));
+            URL url = new URL(site);
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
             long filesize = connection.getContentLength();
@@ -331,7 +358,7 @@ public class SampleController {
                 inStream.close();
                 outStream.close();
                 DOWNLOADS--;
-                Platform.runLater(() -> active_downloads_label.setText(String.valueOf(DOWNLOADS)));
+                Platform.runLater(() -> active_downloads_label.setText("Active Downloads: "+String.valueOf(DOWNLOADS)));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -26,7 +26,7 @@
    <ProgressBar fx:id="firefox_driver_pb" prefWidth="200.0" progress="0.0" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="4" />
    <ProgressBar fx:id="chrome_browser_pb" prefWidth="200.0" progress="0.0" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
    <ProgressBar fx:id="chrome_driver_pb" prefWidth="200.0" progress="0.0" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-   <Label fx:id="active_downloads_label" text="Active Download:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+   <Label fx:id="active_downloads_label" prefHeight="17.0" prefWidth="116.0" text="Active Download:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
    <columnConstraints>
       <ColumnConstraints maxWidth="88.0" minWidth="10.0" prefWidth="10.0" />
       <ColumnConstraints maxWidth="161.0" minWidth="59.0" prefWidth="161.0" />
