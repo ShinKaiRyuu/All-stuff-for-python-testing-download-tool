@@ -45,7 +45,7 @@ public class SampleController {
         {
             put("Windows", "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-32-bit.exe");
             put("Windows64", "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-64-bit.exe");
-            put("Mac", "https://downloads.sourceforge.net/project/git-osx-installer/git-2.10.1-intel-universal-mavericks.dmg?r=&ts=1485112812&use_mirror=netix");
+            put("Mac", "https://sourceforge.net/projects/git-osx-installer/files/git-2.10.1-intel-universal-mavericks.dmg/download?use_mirror=netix&r=&use_mirror=netix");
             put("Linux", "https://codeload.github.com/git/git/zip/v2.11.0");
         }
     };
@@ -166,8 +166,8 @@ public class SampleController {
                 output_chrome_driver = "/downloaded/chromedriver.zip";
 
                 git_download_string = (String) git_download_url.get("Mac");
-                tmp_git = File.createTempFile("git", ".exe");
-                output_git = "/downloaded/Git-2.11.0.3-64-bit.exe";
+                tmp_git = File.createTempFile("git", ".dmg");
+                output_git = "/downloaded/Git-2.11.0.3-64-bit.dmg";
             }
             if (python_checkbox.isSelected()) {
                 final Worker python_download_worker = new Worker(python_download_string, tmp_python, output_python);
