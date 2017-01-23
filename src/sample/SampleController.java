@@ -45,7 +45,7 @@ public class SampleController {
         {
             put("Windows", "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-32-bit.exe");
             put("Windows64", "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-64-bit.exe");
-            put("Mac", "https://sourceforge.net/projects/git-osx-installer/files/git-2.10.1-intel-universal-mavericks.dmg/download?use_mirror=netix&r=&use_mirror=netix");
+            put("Mac", "https://vorboss.dl.sourceforge.net/project/git-osx-installer/git-2.10.1-intel-universal-mavericks.dmg");
             put("Linux", "https://codeload.github.com/git/git/zip/v2.11.0");
         }
     };
@@ -177,6 +177,7 @@ public class SampleController {
                         double progress = (Integer) pcEvt.getNewValue();
                         python_pb.setProgress(progress / 100);
                     } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                        python_pb.setVisible(false);
                         try {
                             python_download_worker.get();
                         } catch (InterruptedException | ExecutionException e) {
@@ -197,6 +198,7 @@ public class SampleController {
                         double progress = (Integer) pcEvt.getNewValue();
                         firefox_browser_pb.setProgress(progress / 100);
                     } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                        firefox_browser_pb.setVisible(false);
                         try {
                             firefox_browser_download_worker.get();
                         } catch (InterruptedException | ExecutionException e) {
@@ -217,6 +219,7 @@ public class SampleController {
                         double progress = (Integer) pcEvt.getNewValue();
                         firefox_driver_pb.setProgress(progress / 100);
                     } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                        firefox_driver_pb.setVisible(false);
                         try {
                             firefox_driver_download_worker.get();
                         } catch (InterruptedException | ExecutionException e) {
@@ -238,6 +241,7 @@ public class SampleController {
                         double progress = (Integer) pcEvt.getNewValue();
                         chrome_browser_pb.setProgress(progress / 100);
                     } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                        chrome_browser_pb.setVisible(false);
                         try {
                             chrome_browser_download_worker.get();
                         } catch (InterruptedException | ExecutionException e) {
@@ -258,6 +262,7 @@ public class SampleController {
                         double progress = (Integer) pcEvt.getNewValue();
                         chrome_driver_pb.setProgress(progress / 100);
                     } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                        chrome_driver_pb.setVisible(false);
                         try {
                             chrome_driver_download_worker.get();
                         } catch (InterruptedException | ExecutionException e) {
@@ -279,6 +284,7 @@ public class SampleController {
                         double progress = (Integer) pcEvt.getNewValue();
                         git_pb.setProgress(progress / 100);
                     } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                        git_pb.setVisible(false);
                         try {
                             git_download_worker.get();
                         } catch (InterruptedException | ExecutionException e) {
