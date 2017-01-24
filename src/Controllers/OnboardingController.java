@@ -18,6 +18,7 @@ public class OnboardingController {
         Parent root1 = fxmlLoader.load();
         Stage new_stage = new Stage();
         new_stage.initModality(Modality.APPLICATION_MODAL);
+        new_stage.setTitle("Download page");
         new_stage.setScene(new Scene(root1));
         new_stage.show();
         Stage current_stage = (Stage) button.getScene().getWindow();
