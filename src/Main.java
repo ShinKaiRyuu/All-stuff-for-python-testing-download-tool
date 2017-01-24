@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,10 +7,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Python Testing tools");
-        primaryStage.setScene(new Scene(root, 600, 600));
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("UI\\OnBoarding.fxml"));
+        primaryStage.setTitle("Python Testing tools: OnBoarding");
+        primaryStage.setScene(new Scene(root, 360, 160));
         primaryStage.show();
     }
 
