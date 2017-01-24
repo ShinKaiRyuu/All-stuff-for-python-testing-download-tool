@@ -1,15 +1,15 @@
-package sample;
+package Controllers;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,7 +20,8 @@ import java.util.concurrent.ExecutionException;
 import static java.lang.Math.toIntExact;
 
 
-public class SampleController {
+public class DownloadPageController {
+
     public CheckBox python_checkbox;
     public CheckBox git_checkbox;
     public ProgressBar python_pb;
@@ -32,8 +33,12 @@ public class SampleController {
     public ProgressBar chrome_browser_pb;
     public ProgressBar chrome_driver_pb;
     public Label active_downloads_label;
+    public Button download_button;
+    public Label selected_items_label;
 
-    private int DOWNLOADS = 0;
+    private int downloads = 0;
+    private int selected_items = 0;
+
     private Map python_download_url = new HashMap<String, String>() {
         {
             put("Windows", "https://www.python.org/ftp/python/3.5.3/python-3.5.3.exe");
@@ -81,7 +86,7 @@ public class SampleController {
 
     public void StartExecution(MouseEvent mouseEvent) throws IOException {
         {
-
+            download_button.setDisable(true);
             //PYTHON
             String python_download_string = null;
             String output_python = null;
@@ -142,9 +147,7 @@ public class SampleController {
                     tmp_git = File.createTempFile("git", ".exe");
                     output_git = "/downloaded/Git-2.11.0.3-32-bit.exe";
                 }
-            }
-            else if (OSNAME.contains("Mac"))
-            {
+            } else if (OSNAME.contains("Mac")) {
                 python_download_string = (String) python_download_url.get("Mac");
                 tmp_python = File.createTempFile("python", ".pkg");
                 output_python = "/downloaded/python-3.5.3.pkg";
@@ -170,135 +173,62 @@ public class SampleController {
                 output_git = "/downloaded/Git-2.11.0.3-64-bit.dmg";
             }
             if (python_checkbox.isSelected()) {
-                final Worker python_download_worker = new Worker(python_download_string, tmp_python, output_python);
-                python_pb.setVisible(true);
-                python_download_worker.addPropertyChangeListener(pcEvt -> {
-                    if ("progress".equals(pcEvt.getPropertyName())) {
-                        double progress = (Integer) pcEvt.getNewValue();
-                        python_pb.setProgress(progress / 100);
-                    } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
-                        python_pb.setVisible(false);
-                        try {
-                            python_download_worker.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            // handle any errors here
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-                python_download_worker.execute();
+                StartBackgroundDownload(python_pb, python_download_string, tmp_python, output_python);
             }
 
             if (firefox_checkbox.isSelected()) {
-                final Worker firefox_browser_download_worker = new Worker(firefox_browser_download_string, tmp_firefox_browser, output_firefox_browser);
-                firefox_browser_pb.setVisible(true);
-                firefox_browser_download_worker.addPropertyChangeListener(pcEvt -> {
-                    if ("progress".equals(pcEvt.getPropertyName())) {
-                        double progress = (Integer) pcEvt.getNewValue();
-                        firefox_browser_pb.setProgress(progress / 100);
-                    } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
-                        firefox_browser_pb.setVisible(false);
-                        try {
-                            firefox_browser_download_worker.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            // handle any errors here
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-                firefox_browser_download_worker.execute();
+                StartBackgroundDownload(firefox_browser_pb, firefox_browser_download_string, tmp_firefox_browser, output_firefox_browser);
             }
 
             if (firefox_checkbox.isSelected()) {
-                final Worker firefox_driver_download_worker = new Worker(firefox_driver_download_string, tmp_firefox_driver, output_firefox_driver);
-                firefox_driver_pb.setVisible(true);
-                firefox_driver_download_worker.addPropertyChangeListener(pcEvt -> {
-                    if ("progress".equals(pcEvt.getPropertyName())) {
-                        double progress = (Integer) pcEvt.getNewValue();
-                        firefox_driver_pb.setProgress(progress / 100);
-                    } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
-                        firefox_driver_pb.setVisible(false);
-                        try {
-                            firefox_driver_download_worker.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            // handle any errors here
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-                firefox_driver_download_worker.execute();
-            }
-
-
-            if (chrome_checkbox.isSelected()) {
-                final Worker chrome_browser_download_worker = new Worker(chrome_browser_download_string, tmp_chrome_browser, output_chrome_browser);
-                chrome_browser_pb.setVisible(true);
-                chrome_browser_download_worker.addPropertyChangeListener(pcEvt -> {
-                    if ("progress".equals(pcEvt.getPropertyName())) {
-                        double progress = (Integer) pcEvt.getNewValue();
-                        chrome_browser_pb.setProgress(progress / 100);
-                    } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
-                        chrome_browser_pb.setVisible(false);
-                        try {
-                            chrome_browser_download_worker.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            // handle any errors here
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-                chrome_browser_download_worker.execute();
+                StartBackgroundDownload(firefox_driver_pb, firefox_driver_download_string, tmp_firefox_driver, output_firefox_driver);
             }
 
             if (chrome_checkbox.isSelected()) {
-                final Worker chrome_driver_download_worker = new Worker(chrome_driver_download_string, tmp_chrome_driver, output_chrome_driver);
-                chrome_driver_pb.setVisible(true);
-                chrome_driver_download_worker.addPropertyChangeListener(pcEvt -> {
-                    if ("progress".equals(pcEvt.getPropertyName())) {
-                        double progress = (Integer) pcEvt.getNewValue();
-                        chrome_driver_pb.setProgress(progress / 100);
-                    } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
-                        chrome_driver_pb.setVisible(false);
-                        try {
-                            chrome_driver_download_worker.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            // handle any errors here
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-                chrome_driver_download_worker.execute();
+                StartBackgroundDownload(chrome_browser_pb, chrome_browser_download_string, tmp_chrome_browser, output_chrome_browser);
             }
 
+            if (chrome_checkbox.isSelected()) {
+                StartBackgroundDownload(chrome_driver_pb, chrome_driver_download_string, tmp_chrome_driver, output_chrome_driver);
+            }
             if (git_checkbox.isSelected()) {
-
-                final Worker git_download_worker = new Worker(git_download_string, tmp_git, output_git);
-                git_pb.setVisible(true);
-                git_download_worker.addPropertyChangeListener(pcEvt -> {
-                    if ("progress".equals(pcEvt.getPropertyName())) {
-                        double progress = (Integer) pcEvt.getNewValue();
-                        git_pb.setProgress(progress / 100);
-                    } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
-                        git_pb.setVisible(false);
-                        try {
-                            git_download_worker.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            // handle any errors here
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-                git_download_worker.execute();
+                StartBackgroundDownload(git_pb, git_download_string, tmp_git, output_git);
             }
         }
+
     }
 
+    private void StartBackgroundDownload(ProgressBar pg, String download_string, File tmp_file, String output_file) {
+        final Worker download_worker = new Worker(download_string, tmp_file, output_file);
+        pg.setVisible(true);
+        download_worker.addPropertyChangeListener(pcEvt -> {
+            if ("progress".equals(pcEvt.getPropertyName())) {
+                double progress = (Integer) pcEvt.getNewValue();
+                pg.setProgress(progress / 100);
+            } else if (pcEvt.getNewValue() == SwingWorker.StateValue.DONE) {
+                pg.setVisible(false);
+                try {
+                    download_worker.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    // handle any errors here
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        download_worker.execute();
+    }
+
+    public void check_selected_state(ActionEvent actionEvent) {
+        CheckBox checkbox = (CheckBox) actionEvent.getSource();
+        if (checkbox.isSelected()) {
+            selected_items++;
+            selected_items_label.setText(String.format("Selected items: %s", selected_items));
+        } else {
+            selected_items--;
+            selected_items_label.setText(String.format("Selected items: %s", selected_items));
+        }
+    }
 
     class Worker extends SwingWorker<Void, Void> {
         private String site;
@@ -313,9 +243,9 @@ public class SampleController {
 
         @Override
         protected Void doInBackground() throws Exception {
-            DOWNLOADS++;
+            downloads++;
 
-            Platform.runLater(() -> active_downloads_label.setText("Active Downloads: " + String.valueOf(DOWNLOADS)));
+            Platform.runLater(() -> active_downloads_label.setText("Active Downloads: " + String.valueOf(downloads)));
             URL url = new URL(site);
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
@@ -352,19 +282,17 @@ public class SampleController {
                 inStream = new FileInputStream(this.file);
                 outStream = new FileOutputStream(output);
                 byte[] buffer = new byte[1024];
-
                 int length;
-                //copy the file content in bytes
                 while ((length = inStream.read(buffer)) > 0) {
-
                     outStream.write(buffer, 0, length);
-
                 }
-
                 inStream.close();
                 outStream.close();
-                DOWNLOADS--;
-                Platform.runLater(() -> active_downloads_label.setText("Active Downloads: "+String.valueOf(DOWNLOADS)));
+                downloads--;
+                if (downloads == 0) {
+                    download_button.setDisable(false);
+                }
+                Platform.runLater(() -> active_downloads_label.setText("Active Downloads: " + String.valueOf(downloads)));
             } catch (IOException e) {
                 e.printStackTrace();
             }

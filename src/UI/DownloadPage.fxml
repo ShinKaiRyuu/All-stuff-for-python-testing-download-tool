@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+
+<AnchorPane minWidth="-Infinity" prefHeight="267.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DownloadPageController">
+    <Label id="Top label" layoutX="161.0" layoutY="14.0" text="Please, select tool for download:" />
+    <CheckBox fx:id="python_checkbox" layoutX="213.0" layoutY="48.0" mnemonicParsing="false" onAction="#check_selected_state" text="Python  3.5.3" />
+    <CheckBox fx:id="git_checkbox" layoutX="213.0" layoutY="181.0" mnemonicParsing="false" onAction="#check_selected_state" text="Git" />
+    <Button fx:id="download_button" layoutX="209.0" layoutY="227.0" onMouseClicked="#StartExecution" text="Download" />
+    <ProgressBar id="python_pb" fx:id="python_pb" layoutX="345.0" layoutY="48.0" prefHeight="18.0" prefWidth="143.0" progress="0.52" visible="false" />
+    <ProgressBar id="git_pb" fx:id="git_pb" disable="true" layoutX="341.0" layoutY="181.0" prefHeight="18.0" prefWidth="143.0" progress="0.0" visible="false" />
+    <Label layoutX="13.0" layoutY="49.0" text="Runtime" GridPane.columnIndex="1" />
+    <Label layoutX="13.0" layoutY="146.0" text="SCM:" GridPane.columnIndex="1" />
+    <Label layoutX="13.0" layoutY="99.0" text="Browser &amp; driver:" />
+    <CheckBox fx:id="firefox_checkbox" layoutX="213.0" layoutY="129.0" mnemonicParsing="false" onAction="#check_selected_state" text="Firefox" />
+    <CheckBox fx:id="chrome_checkbox" layoutX="213.0" layoutY="99.0" mnemonicParsing="false" onAction="#check_selected_state" text="Chrome" />
+    <Label layoutX="382.0" layoutY="74.0" text="Browser" />
+    <Label layoutX="448.0" layoutY="74.0" text="Driver" />
+    <ProgressBar id="chrome_driver_pb" fx:id="chrome_driver_pb" layoutX="448.0" layoutY="99.0" prefHeight="18.0" prefWidth="32.0" progress="0.0" visible="false" />
+    <ProgressBar id="firefox_browser_pb" fx:id="firefox_browser_pb" layoutX="382.0" layoutY="129.0" prefHeight="18.0" prefWidth="43.0" progress="0.0" visible="false" />
+    <ProgressBar id="firefox_driver_pb" fx:id="firefox_driver_pb" layoutX="448.0" layoutY="129.0" prefHeight="18.0" prefWidth="32.0" progress="0.0" visible="false" />
+    <ProgressBar id="chrome_browser_pb" fx:id="chrome_browser_pb" layoutX="382.0" layoutY="99.0" prefHeight="18.0" prefWidth="43.0" progress="0.0" visible="false" />
+    <Label fx:id="active_downloads_label" layoutX="14.0" layoutY="235.0" prefHeight="17.0" prefWidth="143.0" text="Active Download: 0" />
+   <Label fx:id="selected_items_label" layoutX="14.0" layoutY="210.0" text="Selected items: 0" />
+</AnchorPane>
