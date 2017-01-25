@@ -21,6 +21,13 @@ import static java.lang.Math.toIntExact;
 
 public class DownloadPageController {
 
+    public DownloadPageController() throws IOException {
+        properties = new Properties();
+        properties.load(new FileInputStream("Configs/URL.properties"));
+    }
+
+    protected Properties properties;
+
     public CheckBox python_checkbox;
     public CheckBox git_checkbox;
     public ProgressBar python_pb;
@@ -42,7 +49,7 @@ public class DownloadPageController {
 
     public void StartExecution(MouseEvent mouseEvent) throws IOException {
         {
-            Properties url_prop = load_properties();
+            Properties url_prop = properties;
 
 
             download_button.setDisable(true);
@@ -166,16 +173,6 @@ public class DownloadPageController {
 
     }
 
-    private Properties load_properties() {
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream("Configs/URL.properties"));
-
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
-        return prop;
-    }
 
     private Worker StartBackgroundDownload(ProgressBar pb, String download_string, File tmp_file, String output_file) {
         Worker download_worker = new Worker(download_string, tmp_file, output_file);
@@ -249,7 +246,9 @@ public class DownloadPageController {
                     int i;
                     while ((i = in.read(data, 0, 1024)) >= 0) {
                         boolean cancelled = this.isCancelled();
-                        if (cancelled) {break;}
+                        if (cancelled) {
+                            break;
+                        }
                         totalDataRead = totalDataRead + i;
                         bout.write(data, 0, i);
                         long percent = (totalDataRead * 100) / filesize;
