@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -51,119 +52,72 @@ public class DownloadPageController {
         {
             Properties url_prop = properties;
 
-
             download_button.setDisable(true);
+
             //PYTHON
             String python_download_string = null;
-            String output_python = null;
             //BROWSERS
             //CHROME
             String chrome_browser_download_string = null;
             String chrome_driver_download_string = null;
-            String output_chrome_browser = null;
-            String output_chrome_driver = null;
             //FIREFOX
             String firefox_browser_download_string = null;
             String firefox_driver_download_string = null;
-            String output_firefox_browser = null;
-            String output_firefox_driver = null;
             //GIT
             String git_download_string = null;
-            String output_git = null;
             //IDE
 
             String OSNAME = System.getProperty("os.name");
-            File tmp_python = null;
-            File tmp_firefox_browser = null;
-            File tmp_firefox_driver = null;
-            File tmp_chrome_browser = null;
-            File tmp_chrome_driver = null;
-            File tmp_git = null;
+
             boolean is64bit;
 
             if (OSNAME.contains("Windows")) {
                 is64bit = (System.getenv("ProgramFiles(x86)") != null);
 
                 python_download_string = url_prop.getProperty("URL_PYTHON_WINDOWS");
-                tmp_python = File.createTempFile("python", ".exe");
-                output_python = "/downloaded/python-3.5.3.exe";
-
                 firefox_browser_download_string = url_prop.getProperty("URL_FIREFOX_BROWSER_WINDOWS");
-                tmp_firefox_browser = File.createTempFile("firefox", ".exe");
-                output_firefox_browser = "/downloaded/firefox.exe";
-
                 firefox_driver_download_string = url_prop.getProperty("URL_FIREFOX_DRIVER_WINDOWS");
-                tmp_firefox_driver = File.createTempFile("geckodriver", ".zip");
-                output_firefox_driver = "/downloaded/geckodriver.zip";
-
                 chrome_browser_download_string = url_prop.getProperty("URL_CHROME_BROWSER_WINDOWS");
-                tmp_chrome_browser = File.createTempFile("firefox", ".exe");
-                output_chrome_browser = "/downloaded/chrome.exe";
-
                 chrome_driver_download_string = url_prop.getProperty("URL_CHROME_DRIVER_WINDOWS");
-                tmp_chrome_driver = File.createTempFile("chromedriver", ".zip");
-                output_chrome_driver = "/downloaded/chromedriver.zip";
-
                 if (is64bit) {
                     git_download_string = url_prop.getProperty("URL_GIT_WINDOWS64");
-                    tmp_git = File.createTempFile("git", ".exe");
-                    output_git = "/downloaded/Git-2.11.0.3-64-bit.exe";
                 } else {
                     git_download_string = url_prop.getProperty("URL_GIT_WINDOWS");
-                    tmp_git = File.createTempFile("git", ".exe");
-                    output_git = "/downloaded/Git-2.11.0.3-32-bit.exe";
                 }
             } else if (OSNAME.contains("Mac")) {
                 python_download_string = url_prop.getProperty("URL_PYTHON_MACOS");
-                tmp_python = File.createTempFile("python", ".pkg");
-                output_python = "/downloaded/python-3.5.3.pkg";
-
                 firefox_browser_download_string = url_prop.getProperty("URL_FIREFOX_BROWSER_MACOS");
-                tmp_firefox_browser = File.createTempFile("firefox", ".dmg");
-                output_firefox_browser = "/downloaded/firefox.dmg";
-
                 firefox_driver_download_string = url_prop.getProperty("URL_FIREFOX_DRIVER_MACOS");
-                tmp_firefox_driver = File.createTempFile("geckodriver", ".zip");
-                output_firefox_driver = "/downloaded/geckodriver.zip";
-
                 chrome_browser_download_string = url_prop.getProperty("URL_CHROME_BROWSER_MACOS");
-                tmp_chrome_browser = File.createTempFile("chrome", ".dmg");
-                output_chrome_browser = "/downloaded/chrome.dmg";
-
                 chrome_driver_download_string = url_prop.getProperty("URL_CHROME_DRIVER_MACOS");
-                tmp_chrome_driver = File.createTempFile("chromedriver", ".zip");
-                output_chrome_driver = "/downloaded/chromedriver.zip";
-
                 git_download_string = url_prop.getProperty("URL_GIT_MACOS");
-                tmp_git = File.createTempFile("git", ".dmg");
-                output_git = "/downloaded/Git-2.11.0.3-64-bit.dmg";
             }
 
             if (python_checkbox.isSelected()) {
-                workers.add(StartBackgroundDownload(python_pb, python_download_string, tmp_python, output_python));
+                workers.add(StartBackgroundDownload(python_pb, python_download_string));
             }
 
             if (firefox_checkbox.isSelected()) {
-                Worker worker = StartBackgroundDownload(firefox_browser_pb, firefox_browser_download_string, tmp_firefox_browser, output_firefox_browser);
+                Worker worker = StartBackgroundDownload(firefox_browser_pb, firefox_browser_download_string);
                 workers.add(worker);
             }
 
             if (firefox_checkbox.isSelected()) {
-                Worker worker = StartBackgroundDownload(firefox_driver_pb, firefox_driver_download_string, tmp_firefox_driver, output_firefox_driver);
+                Worker worker = StartBackgroundDownload(firefox_driver_pb, firefox_driver_download_string);
                 workers.add(worker);
             }
 
             if (chrome_checkbox.isSelected()) {
-                Worker worker = StartBackgroundDownload(chrome_browser_pb, chrome_browser_download_string, tmp_chrome_browser, output_chrome_browser);
+                Worker worker = StartBackgroundDownload(chrome_browser_pb, chrome_browser_download_string);
                 workers.add(worker);
             }
 
             if (chrome_checkbox.isSelected()) {
-                Worker worker = StartBackgroundDownload(chrome_driver_pb, chrome_driver_download_string, tmp_chrome_driver, output_chrome_driver);
+                Worker worker = StartBackgroundDownload(chrome_driver_pb, chrome_driver_download_string);
                 workers.add(worker);
             }
             if (git_checkbox.isSelected()) {
-                Worker worker = StartBackgroundDownload(git_pb, git_download_string, tmp_git, output_git);
+                Worker worker = StartBackgroundDownload(git_pb, git_download_string);
                 workers.add(worker);
             }
             if (workers != null) {
@@ -174,8 +128,8 @@ public class DownloadPageController {
     }
 
 
-    private Worker StartBackgroundDownload(ProgressBar pb, String download_string, File tmp_file, String output_file) {
-        Worker download_worker = new Worker(download_string, tmp_file, output_file);
+    private Worker StartBackgroundDownload(ProgressBar pb, String download_string) {
+        Worker download_worker = new Worker(download_string);
         pb.setProgress(0);
         pb.setVisible(true);
         download_worker.addPropertyChangeListener(pcEvt -> {
@@ -218,13 +172,11 @@ public class DownloadPageController {
 
     class Worker extends SwingWorker<Void, Void> {
         private String site;
-        private File file;
+        private File file = null;
         private String outputfile;
 
-        Worker(String site, File file, String outputfile) {
+        Worker(String site) {
             this.site = site;
-            this.file = file;
-            this.outputfile = outputfile;
         }
 
         @Override
@@ -232,7 +184,14 @@ public class DownloadPageController {
             downloads++;
 
             Platform.runLater(() -> active_downloads_label.setText("Active Downloads: " + String.valueOf(downloads)));
-            URL url = new URL(site);
+            URL url = new URL(URLDecoder.decode(site,"UTF-8"));
+            String url_file = url.getFile();
+            outputfile = url_file.substring(url_file.lastIndexOf('/') + 1, url_file.length());
+            String name = outputfile.split("\\.(?=[^\\.]+$)", 0)[0];
+            String extension = outputfile.split("\\.(?=[^\\.]+$)", 0)[1];
+            outputfile = "/Downloads/"+outputfile;
+            file = File.createTempFile(name,"."+extension);
+            url = new URL(site);
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
             long filesize = connection.getContentLength();
